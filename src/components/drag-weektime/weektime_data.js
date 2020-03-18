@@ -32,7 +32,7 @@ const formatWeektime = (col, max) => {
   const endstamp = beginstamp + 1800000 * s;
 
   const begin = formatDate(new Date(beginstamp), "hh:mm");
-  const end = +col === 23 || +col === 47 ? '24:00' : formatDate(new Date(endstamp), 'hh:mm')
+  const end = +col === 23 || +col === 47 ? '24:00' : formatDate(new Date(endstamp), 'hh:mm');
   return `${begin}-${end}`;
 };
 
@@ -101,7 +101,10 @@ export const inserting = (value, list, max = 2) => {
 };
 
 export const createWeektimeData = (max = 2) => {
-  return [
+  const times = createArr(24 * max).map((t, col) => {
+    return formatWeektime(col, max);
+  });
+  const data = [
     "星期一",
     "星期二",
     "星期三",
@@ -129,4 +132,5 @@ export const createWeektimeData = (max = 2) => {
       child: children(ret, index, 24 * max)
     };
   });
+  return { times, data };
 };

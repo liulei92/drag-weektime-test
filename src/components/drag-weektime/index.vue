@@ -5,7 +5,31 @@
       :class="{ 'c-schedue': true, 'c-schedue-notransi': mode }"
       :style="styleValue"
     ></div>
-
+    <!-- 方式1 -->
+    <!-- <table class="c-weektime-table">
+      <thead class="c-weektime-head">
+        <td>全选/全不选</td>
+        <td v-for="(n, i) in 7" :key="i">{{ i }}</td>
+      </thead>
+      <tbody class="c-weektime-body">
+        <tr v-for="(t, i) in times" :key="i">
+          <td>{{ t }}</td>
+          <td
+            v-for="(n, j) in 7"
+            :key="`${j}-${i}`"
+            :data-week="j"
+            :data-time="i"
+            :class="selectClasses(weektimeData[j].child[i])"
+            @mouseenter="cellEnter(weektimeData[j].child[i])"
+            @mousedown="cellDown(weektimeData[j].child[i])"
+            @mouseup="cellUp(weektimeData[j].child[i])"
+            class="weektime-atom-item"
+          ></td>
+        </tr>
+      </tbody>
+    </table>
+    <br /> -->
+    <!-- 方式2 -->
     <table :class="{ 'c-min-table': colspan < 2 }" class="c-weektime-table">
       <thead class="c-weektime-head">
         <tr>
@@ -168,14 +192,22 @@ export default {
     }
   },
   created() {
-    this.weektimeData = createWeektimeData(this.colspan);
+    const { times, data } = createWeektimeData(this.colspan);
+    this.times = times;
+    this.weektimeData = data;
+    console.log(this.weektimeData);
     this.theadArr = createArr(24);
   },
   methods: {
+    selectClasses1(item) {
+      console.log(item)
+      return item.check ? "ui-selected" : "";
+    },
     cellEnter(item) {
       const ele = document.querySelector(
         `td[data-week='${item.row}'][data-time='${item.col}']`
       );
+      console.log(ele, this.mode)
       if (ele && !this.mode) {
         this.left = ele.offsetLeft;
         this.top = ele.offsetTop;
@@ -291,7 +323,7 @@ export default {
 .c-weektime {
   min-width: 640px;
   position: relative;
-  display: inline-block;
+  // display: inline-block;
 }
 .c-schedue {
   background: #598fe6;
@@ -306,6 +338,7 @@ export default {
     left 0.12s ease;
 }
 .c-weektime-table {
+  width: 100%;
   border-collapse: collapse;
   th {
     vertical-align: inherit;
