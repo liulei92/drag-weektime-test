@@ -32,7 +32,7 @@ const formatWeektime = (col, max) => {
   const endstamp = beginstamp + 1800000 * s;
 
   const begin = formatDate(new Date(beginstamp), "hh:mm");
-  const end = formatDate(new Date(endstamp), "hh:mm");
+  const end = +col === 23 || +col === 47 ? '24:00' : formatDate(new Date(endstamp), 'hh:mm')
   return `${begin}-${end}`;
 };
 
